@@ -1,0 +1,36 @@
+{% extends "website/base.html" %} {% block content %}
+<section
+  class="flex flex-col justify-center items-center mx-auto max-w-screen-md my-10"
+>
+  <div class="bg-white shadow-md p-14 m-10 rounded-lg">
+    <h2 class="text-2xl font-bold mb-4">Terms and Conditions</h2>
+    <p class="mb-4">
+      Welcome to our clinic booking system. By using our services, you agree to
+      the following terms and conditions:
+    </p>
+    <ol class="list-decimal list-inside mb-4">
+      <li>
+        <strong>Appointment Booking:</strong> You can book appointments through
+        our website. Please provide accurate information when booking.
+      </li>
+      <li>
+        <strong>Cancellation Policy:</strong> If you need to cancel or
+        reschedule an appointment, please do so at least 24 hours in advance.
+      </li>
+      <li>
+        <strong>Payment:</strong> Payment is due at the time of service. We
+        accept various payment methods.
+      </li>
+      <li>
+        <strong>Privacy:</strong> We respect your privacy and will not share
+        your personal information without your consent.
+      </li>
+    </ol>
+    <p class="mb-4">
+      By using our services, you acknowledge that you have read and understood
+      these terms and conditions.
+    </p>
+  </div>
+</section>
+
+{% endblock content %}
