@@ -1,0 +1,49 @@
+{% extends "website/base.html" %}
+
+{% block content %}
+<section class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-lg rounded-lg p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Patient Dashboard</h1>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Welcome Card -->
+            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <h3 class="text-xl font-semibold text-blue-800 mb-2">Welcome back!</h3>
+                <p class="text-blue-600">{{ user.username }}</p>
+                <p class="text-sm text-gray-600 mt-2">Role: Patient</p>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                <h3 class="text-xl font-semibold text-green-800 mb-4">Quick Actions</h3>
+                <div class="space-y-2">
+                    <a href="/book_appointment" class="block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-center transition duration-300">
+                        Book Appointment
+                    </a>
+                    <a href="#" class="block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-center transition duration-300">
+                        View Appointments
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Profile Info -->
+            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Profile</h3>
+                <div class="space-y-2 text-sm">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <a href="#" class="text-blue-600 hover:text-blue-800">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="mt-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <p class="text-gray-600">No recent activity to display.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,12 +1,47 @@
 {% load static %}
 <nav class="relative w-full flex px-12 py-9 justify-between items-center bg-white shadow-lg">
-    <a href="/"><img src="{% static 'images/Logo_h.svg' %}" alt="Medical-Logo" width="200px" height="160px"/></a>
+    <a href="{% url 'home' %}"><img src="{% static 'images/Logo_h.svg' %}" alt="Medical-Logo" width="200px" height="160px"/></a>
     <ul class="list-none flex justify-end items-center flex-1">
-        <li class="cursor-pointer text-gray-800 mr-10"><a href="/aboutus">About Us</a></li>
-        <li class="cursor-pointer text-gray-800 mr-10"><a href="/contact">Contact Us</a></li>
-        <li class="cursor-pointer text-gray-800 mr-3"><a href="/book_appointment"><button type="button" onclick="'/book_appointment'" class="w-auto text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 mb-2">Book Appointment
-        </button></a></li>
-        <li><a href="/login"><button type="button" onclick="'/adminlogin'" class="w-auto text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 mb-2">Login
-        </button></a></li>
+        <li class="cursor-pointer text-gray-800 mr-10">
+            <a href="{% url 'about' %}">About Us</a>
+        </li>
+        <li class="cursor-pointer text-gray-800 mr-10">
+            <a href="{% url 'contact' %}">Contact Us</a>
+        </li>
+        
+        {% if user.is_authenticated %}
+            <li class="cursor-pointer text-gray-800 mr-10">
+                <span>Welcome, {{ user.username }}!</span>
+            </li>
+            <li class="cursor-pointer text-gray-800 mr-3">
+                <a href="{% url 'book_appointment' %}">
+                    <button type="button" class="w-auto text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 transition duration-300">
+                        Book Appointment
+                    </button>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">
+                    <button type="button" class="w-auto text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 transition duration-300">
+                        Logout
+                    </button>
+                </a>
+            </li>
+        {% else %}
+            <li class="cursor-pointer text-gray-800 mr-3">
+                <a href="{% url 'patient_signup' %}">
+                    <button type="button" class="w-auto text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 transition duration-300">
+                        Sign Up
+                    </button>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'login' %}">
+                    <button type="button" class="w-auto text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 transition duration-300">
+                        Login
+                    </button>
+                </a>
+            </li>
+        {% endif %}
     </ul>
-  </nav>
+</nav>
