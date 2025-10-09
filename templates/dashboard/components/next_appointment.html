@@ -1,0 +1,39 @@
+{% load static %}
+<div class="border-1 bg-white rounded-lg border-gray-200 shadow-md h-96 mb-4 mt-5">
+    <div class="h-12 py-4 px-9 text-lg"> Next Appointments
+    </div>
+
+    <table class="w-full">
+        <thead>
+            <tr class="bg-gray-200 py-1 px-5">
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Visit time</th>
+                <th>Conditions</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+       </thead>
+       <tbody>
+            {% for appointment in appointments_patient %}
+            <tr class="border-b text-sm border-gray-200">
+                <td class="py-3 px-4 flex items-center">
+                    <img src="{% static 'images/doctor.jpg' %}" class="rounded-full h-6 mr-3">
+                    {% if appointment.doctor %}
+                        <span>{{ appointment.doctor.first_name }}</span>
+                    {% else %}
+                        <span class="text-gray-500">No doctor assigned</span>
+                    {% endif %}
+                </td>
+        <td>Date</td>
+        <td>Visit Time</td>
+        <td>Conditions</td>
+        <td>update</td>
+        <td>delete</td>
+    </tr>
+
+    {% endfor %}
+    </tbody>
+    
+</table>
+</div>

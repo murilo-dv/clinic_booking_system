@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "users",
     "website",
     "appointments",
+    "dashboard",
 ]
 
 if DEBUG:

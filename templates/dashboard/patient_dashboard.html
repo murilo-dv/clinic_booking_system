@@ -1,0 +1,29 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<div class="mb-5">
+<h1 class="text-2xl font-extrabold">Good Morning</h1>
+{% if user.role == 'patient' %}
+    <h1>{{ user.patient.first_name }} {{ user.patient.last_name }}</h1>
+{% else %}
+    <h1>{{ user.username }}</h1>
+{% endif %}
+</div>
+
+<!-- Quick Actions -->
+<div class="mb-6">
+    <div class="flex flex-wrap gap-3">
+        <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>
+            Book Appointment
+        </a>
+        <a href="{% url 'appointments_list' %}" class="btn btn-secondary">
+            <i class="fas fa-calendar-alt mr-2"></i>
+            My Appointments
+        </a>
+    </div>
+</div>
+
+{% include 'dashboard/components/next_appointment.html' %}
+{% include 'dashboard/components/blog_dashboard.html' %}
+{% endblock content %}

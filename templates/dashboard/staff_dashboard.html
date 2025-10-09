@@ -1,0 +1,30 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<div class="mb-5">
+<h1 class="text-2xl font-extrabold">Good Morning</h1>
+<h1>{{ user.get_full_name|default:user.username }}</h1>    
+</div>
+
+<!-- Quick Actions -->
+<div class="mb-6">
+    <div class="flex flex-wrap gap-3">
+        <a href="{% url 'appointments_list' %}" class="btn btn-primary">
+            <i class="fas fa-calendar-alt mr-2"></i>
+            All Appointments
+        </a>
+        <a href="/admin/" class="btn btn-secondary" target="_blank">
+            <i class="fas fa-cogs mr-2"></i>
+            Admin Panel
+        </a>
+        <a href="{% url 'book_appointment' %}" class="btn btn-accent">
+            <i class="fas fa-plus mr-2"></i>
+            Book Appointment
+        </a>
+    </div>
+</div>
+
+{%include 'dashboard/components/count_card_appointments.html'%}
+{%include 'dashboard/components/next_patient.html'%}
+{%include 'dashboard/components/appointments_doctor.html'%}
+{% endblock content %}

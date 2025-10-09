@@ -1,0 +1,25 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Clinic Global 1998</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-[#F6F8FB]">
+    <div class="container mx-auto mt-4">
+        <!-- Navbar   -->
+        {% include 'dashboard/navbar.html' %}
+
+        <!-- Sidebar -->
+         {% include "dashboard/sidebar.html" %}
+
+        <!-- Main -->
+        <main class="p-4 md:ml-64 h-auto pt-20">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+</body>
+</html>

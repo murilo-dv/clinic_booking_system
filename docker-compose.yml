@@ -2,10 +2,11 @@ version: "3.7"
 
 x-app: &default-app
   build:
-    context: "."
+    image: murilodv/booking-system:latest
   volumes:
     - .:/app
   restart: "unless-stopped"
+  working_dir: /app
 
 services:
   web:
@@ -13,6 +14,8 @@ services:
     command: "python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
+    networks:
+      - webnet
 
   tailwind:
     <<: *default-app
@@ -20,3 +23,9 @@ services:
     # Without tty, no stdin, and tailwind watcher aborts
     # https://github.com/tailwindlabs/tailwindcss/issues/5324
     tty: true
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    external: true
