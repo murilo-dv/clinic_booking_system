@@ -1,6 +1,7 @@
 version: "3.7"
 
 x-app: &default-app
+  
   image: murilodv/booking-system:latest
   volumes:
     - .:/app
