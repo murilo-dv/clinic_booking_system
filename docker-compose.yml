@@ -1,8 +1,7 @@
 version: "3.7"
 
 x-app: &default-app
-  build:
-    image: murilodv/booking-system:latest
+  image: murilodv/booking-system:latest
   volumes:
     - .:/app
   restart: "unless-stopped"
