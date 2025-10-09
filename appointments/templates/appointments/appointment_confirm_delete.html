@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cancel Appointment{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Cancel Appointment</h1>
+        <a href="{% url 'appointment_detail' appointment.id %}" class="btn btn-ghost">
+            <i class="fas fa-arrow-left mr-2"></i>Back
+        </a>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl border-error border-2">
+        <div class="card-body">
+            <div class="alert alert-warning mb-6">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <h3 class="font-bold">Are you sure you want to cancel this appointment?</h3>
+                    <div class="text-sm">This action cannot be undone.</div>
+                </div>
+            </div>
+
+            <!-- Appointment Details -->
+            <div class="bg-base-200 rounded-lg p-4 mb-6">
+                <h3 class="font-bold text-lg mb-3">Appointment Details</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fas fa-calendar text-primary"></i>
+                            <span class="font-semibold">Date:</span>
+                            <span class="badge badge-outline">{{ appointment.date|date:"l, F d, Y" }}</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fas fa-clock text-primary"></i>
+                            <span class="font-semibold">Time:</span>
+                            <span class="badge badge-primary">{{ appointment.get_timeslot_display }}</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fas fa-user-md text-primary"></i>
+                            <span class="font-semibold">Doctor:</span>
+                            <span>Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.username }}</span>
+                        </div>
+                        
+                        {% if request.user.role != 'patient' %}
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-user text-primary"></i>
+                                <span class="font-semibold">Patient:</span>
+                                <span>{{ appointment.patient.user.get_full_name|default:appointment.patient.user.username }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if appointment.doctor.specialization %}
+                    <div class="flex items-center space-x-2 mt-2">
+                        <i class="fas fa-stethoscope text-primary"></i>
+                        <span class="font-semibold">Specialization:</span>
+                        <span>{{ appointment.doctor.specialization }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Confirmation Form -->
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                
+                <div class="card-actions justify-center space-x-4">
+                    <a href="{% url 'appointment_detail' appointment.id %}" class="btn btn-ghost btn-lg">
+                        <i class="fas fa-times mr-2"></i>
+                        Keep Appointment
+                    </a>
+                    <button type="submit" class="btn btn-error btn-lg">
+                        <i class="fas fa-trash mr-2"></i>
+                        Yes, Cancel Appointment
+                    </button>
+                </div>
+            </form>
+
+            <!-- Contact Information -->
+            <div class="mt-6 pt-4 border-t border-base-300">
+                <div class="text-center text-sm text-gray-600">
+                    <p class="mb-2">Need to reschedule instead?</p>
+                    <div class="space-x-2">
+                        <a href="{% url 'appointment_update' appointment.id %}" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit mr-1"></i>
+                            Reschedule
+                        </a>
+                        <span class="text-gray-400">or</span>
+                        <a href="{% url 'book_appointment' %}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus mr-1"></i>
+                            Book New
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancellation Policy -->
+    <div class="mt-6">
+        <div class="card bg-base-200 shadow">
+            <div class="card-body">
+                <h3 class="card-title text-sm">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Cancellation Policy
+                </h3>
+                <div class="text-sm space-y-2">
+                    <p>• Appointments can be cancelled up to 24 hours before the scheduled time</p>
+                    <p>• Late cancellations may be subject to a cancellation fee</p>
+                    <p>• For urgent medical needs, please contact us directly</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

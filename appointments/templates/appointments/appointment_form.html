@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ action }} Appointment{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">{{ action }} Appointment</h1>
+        <a href="{% if appointment %}{% url 'appointment_detail' appointment.id %}{% else %}{% url 'appointments_list' %}{% endif %}" class="btn btn-ghost">
+            <i class="fas fa-arrow-left mr-2"></i>Back
+        </a>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <h3 class="font-bold">Please correct the following errors:</h3>
+                            <ul class="list-disc list-inside">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ field|title }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Patient Field -->
+                {% if form.patient.widget.input_type != 'hidden' %}
+                    <div class="form-control">
+                        <label class="label" for="{{ form.patient.id_for_label }}">
+                            <span class="label-text font-semibold">{{ form.patient.label }}</span>
+                        </label>
+                        {{ form.patient }}
+                        {% if form.patient.help_text %}
+                            <label class="label">
+                                <span class="label-text-alt">{{ form.patient.help_text }}</span>
+                            </label>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    {{ form.patient }}
+                {% endif %}
+
+                <!-- Doctor Field -->
+                <div class="form-control">
+                    <label class="label" for="{{ form.doctor.id_for_label }}">
+                        <span class="label-text font-semibold">{{ form.doctor.label }}</span>
+                    </label>
+                    {{ form.doctor }}
+                    {% if form.doctor.help_text %}
+                        <label class="label">
+                            <span class="label-text-alt">{{ form.doctor.help_text }}</span>
+                        </label>
+                    {% endif %}
+                </div>
+
+                <!-- Date Field -->
+                <div class="form-control">
+                    <label class="label" for="{{ form.date.id_for_label }}">
+                        <span class="label-text font-semibold">{{ form.date.label }}</span>
+                    </label>
+                    {{ form.date }}
+                    {% if form.date.help_text %}
+                        <label class="label">
+                            <span class="label-text-alt">{{ form.date.help_text }}</span>
+                        </label>
+                    {% endif %}
+                </div>
+
+                <!-- Time Slot Field -->
+                <div class="form-control">
+                    <label class="label" for="{{ form.timeslot.id_for_label }}">
+                        <span class="label-text font-semibold">{{ form.timeslot.label }}</span>
+                    </label>
+                    {{ form.timeslot }}
+                    {% if form.timeslot.help_text %}
+                        <label class="label">
+                            <span class="label-text-alt">{{ form.timeslot.help_text }}</span>
+                        </label>
+                    {% endif %}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="card-actions justify-end space-x-2 pt-4">
+                    <a href="{% if appointment %}{% url 'appointment_detail' appointment.id %}{% else %}{% url 'appointments_list' %}{% endif %}" class="btn btn-ghost">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-2"></i>
+                        {{ action }} Appointment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if appointment %}
+        <div class="mt-6">
+            <div class="card bg-base-200 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-sm">Current Appointment Details</h3>
+                    <div class="text-sm space-y-1">
+                        <p><strong>Date:</strong> {{ appointment.date|date:"l, F d, Y" }}</p>
+                        <p><strong>Time:</strong> {{ appointment.get_timeslot_display }}</p>
+                        <p><strong>Doctor:</strong> Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.username }}</p>
+                        {% if request.user.role != 'patient' %}
+                            <p><strong>Patient:</strong> {{ appointment.patient.user.get_full_name|default:appointment.patient.user.username }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add styling to form fields
+    const selects = document.querySelectorAll('select');
+    selects.forEach(select => {
+        select.classList.add('select', 'select-bordered', 'w-full');
+    });
+    
+    const inputs = document.querySelectorAll('input[type="date"]');
+    inputs.forEach(input => {
+        input.classList.add('input', 'input-bordered', 'w-full');
+    });
+    
+    // Set minimum date to today
+    const dateInput = document.querySelector('input[type="date"]');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+    }
+});
+</script>
+{% endblock %}

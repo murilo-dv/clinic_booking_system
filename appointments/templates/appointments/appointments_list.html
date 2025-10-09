@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">
+            {% if request.user.role == 'staff' or request.user.is_superuser %}
+                All Appointments
+            {% else %}
+                My Appointments
+            {% endif %}
+        </h1>
+        {% if request.user.role == 'patient' %}
+            <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+                <i class="fas fa-plus mr-2"></i>Book New Appointment
+            </a>
+        {% endif %}
+    </div>
+
+    {% if appointments %}
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="table w-full">
+                    <thead>
+                        <tr class="bg-base-200">
+                            <th>Date</th>
+                            <th>Time</th>
+                            {% if request.user.role == 'doctor' or request.user.role == 'staff' or request.user.is_superuser %}
+                                <th>Patient</th>
+                            {% endif %}
+                            {% if request.user.role == 'patient' or request.user.role == 'staff' or request.user.is_superuser %}
+                                <th>Doctor</th>
+                            {% endif %}
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                            <tr class="hover">
+                                <td>
+                                    <span class="font-medium">{{ appointment.date|date:"M d, Y" }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-outline">{{ appointment.get_timeslot_display }}</span>
+                                </td>
+                                {% if request.user.role == 'doctor' or request.user.role == 'staff' or request.user.is_superuser %}
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
+                                                    <span class="text-xs">{{ appointment.patient.user.first_name|first }}{{ appointment.patient.user.last_name|first }}</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold">{{ appointment.patient.user.get_full_name|default:appointment.patient.user.username }}</div>
+                                                <div class="text-sm opacity-50">{{ appointment.patient.phone_number|default:"No phone" }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                {% endif %}
+                                {% if request.user.role == 'patient' or request.user.role == 'staff' or request.user.is_superuser %}
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-primary text-primary-content rounded-full w-8">
+                                                    <span class="text-xs">{{ appointment.doctor.user.first_name|first }}{{ appointment.doctor.user.last_name|first }}</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold">Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.username }}</div>
+                                                <div class="text-sm opacity-50">{{ appointment.doctor.specialization|default:"General Practice" }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                {% endif %}
+                                <td>
+                                    {% if appointment.date < today %}
+                                        <span class="badge badge-ghost">Completed</span>
+                                    {% elif appointment.date == today %}
+                                        <span class="badge badge-success">Today</span>
+                                    {% else %}
+                                        <span class="badge badge-info">Scheduled</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="flex space-x-2">
+                                        <a href="{% url 'appointment_detail' appointment.id %}" class="btn btn-sm btn-ghost">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        {% if appointment.date >= today %}
+                                            <a href="{% url 'appointment_update' appointment.id %}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'appointment_delete' appointment.id %}" class="btn btn-sm btn-error">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-12">
+            <div class="mb-4">
+                <i class="fas fa-calendar-alt text-6xl text-gray-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">No appointments found</h3>
+            <p class="text-gray-500 mb-6">
+                {% if request.user.role == 'patient' %}
+                    You haven't booked any appointments yet.
+                {% else %}
+                    No appointments are scheduled.
+                {% endif %}
+            </p>
+            {% if request.user.role == 'patient' %}
+                <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+                    <i class="fas fa-plus mr-2"></i>Book Your First Appointment
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
