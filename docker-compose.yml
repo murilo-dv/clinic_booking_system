@@ -19,9 +19,14 @@ services:
 
   tailwind:
     <<: *default-app
-    command: "python manage.py tailwind start"
-    # Without tty, no stdin, and tailwind watcher aborts
-    # https://github.com/tailwindlabs/tailwindcss/issues/5324
+    command: >
+      bash -c "
+        cd theme/static_src &&
+        rm -rf node_modules package-lock.json &&
+        npm install &&
+        cd ../.. &&
+        python manage.py tailwind start
+      "
     tty: true
     networks:
       - webnet
