@@ -1,0 +1,21 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<div class="mb-5">
+    <h1 class="text-2xl font-extrabold">Dashboard</h1>
+    <p class="text-gray-600 mt-2">Welcome to the clinic booking dashboard.</p>
+</div>
+
+<div class="flex flex-wrap gap-3">
+    <a href="{% url 'appointments_list' %}" class="btn btn-secondary">
+        <i class="fas fa-calendar-alt mr-2"></i>
+        Appointments
+    </a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'logout' %}" class="btn btn-outline">
+        <i class="fas fa-sign-out-alt mr-2"></i>
+        Logout
+    </a>
+    {% endif %}
+</div>
+{% endblock content %}
