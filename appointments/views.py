@@ -127,6 +127,8 @@ def appointment_detail(request, appointment_id):
 def appointment_update(request, appointment_id):
     """View to update appointment"""
     appointment = get_object_or_404(Appointment, id=appointment_id)
+    current_doctor = appointment.doctor
+    current_patient = appointment.patient
     
     # Check permissions
     can_edit = False
@@ -155,6 +157,11 @@ def appointment_update(request, appointment_id):
         form = AppointmentForm(request.POST, instance=appointment)
         if form.is_valid():
             updated_appointment = form.save(commit=False)
+
+            # Enforce ownership fields server-side for non-staff users
+            if not (request.user.role == 'staff' or request.user.is_superuser):
+                updated_appointment.doctor = current_doctor
+                updated_appointment.patient = current_patient
             
             # Check if the new time slot is available (excluding current appointment)
             existing_appointment = Appointment.objects.filter(
@@ -225,4 +232,3 @@ def appointment_delete(request, appointment_id):
         return redirect('appointments_list')
     
     return render(request, 'appointments/appointment_confirm_delete.html', {'appointment': appointment})
-
